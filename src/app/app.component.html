@@ -1,0 +1,28 @@
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>Brief Explorer</h1>
+    </div>
+    <nav class="sidebar-nav">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📊</span>
+        <span class="nav-text">Dashboard</span>
+      </a>
+      <a routerLink="/ee-list" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📈</span>
+        <span class="nav-text">EE Balances</span>
+      </a>
+      <a routerLink="/ei-list" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📉</span>
+        <span class="nav-text">EI Balances</span>
+      </a>
+      <a routerLink="/reconciliation" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">🔄</span>
+        <span class="nav-text">Reconciliation</span>
+      </a>
+    </nav>
+  </aside>
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

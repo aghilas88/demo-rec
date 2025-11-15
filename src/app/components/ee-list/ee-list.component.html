@@ -1,0 +1,47 @@
+<div class="ee-list">
+  <h2>EE Balances</h2>
+  
+  <div class="filters">
+    <div class="filter-group">
+      <label for="configName">Config Name:</label>
+      <input 
+        type="text" 
+        id="configName" 
+        [(ngModel)]="configName" 
+        placeholder="Enter config name"
+      />
+    </div>
+    <div class="filter-group">
+      <label for="balanceDate">Balance Date:</label>
+      <input 
+        type="date" 
+        id="balanceDate" 
+        [(ngModel)]="balanceDate"
+      />
+    </div>
+    <button class="search-btn" (click)="fetchEEBalances()">Search</button>
+  </div>
+
+  <table *ngIf="eeBalances.length > 0">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Dossier</th>
+        <th>EE Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let balance of eeBalances">
+        <td>{{ balance.product }}</td>
+        <td>{{ balance.dossier }}</td>
+        <td>{{ balance.eeAmount | number: '1.2-2' }}</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div class="pagination" *ngIf="eeBalances.length > 0">
+    <button (click)="previousPage()" [disabled]="currentPage === 0">Previous</button>
+    <span>Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next</button>
+  </div>
+</div>
