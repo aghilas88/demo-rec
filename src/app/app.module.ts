@@ -6,24 +6,24 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { EEListComponent } from './components/ee-list/ee-list.component';
-import { EIListComponent } from './components/ei-list/ei-list.component';
-import { ReconciliationComponent } from './components/reconciliation/reconciliation.component';
+import { EEBalanceExplorerComponent } from './components/ee-balance-explorer/ee-balance-explorer.component';
+import { EIBalanceExplorerComponent } from './components/ei-balance-explorer/ei-balance-explorer.component';
+import { ReconciliationExplorerComponent } from './components/reconciliation-explorer/reconciliation-explorer.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
-  { path: 'ee-list', component: EEListComponent },
-  { path: 'ei-list', component: EIListComponent },
-  { path: 'reconciliation', component: ReconciliationComponent }
+  { path: 'ee-list', component: EEBalanceExplorerComponent },
+  { path: 'ei-list', component: EIBalanceExplorerComponent },
+  { path: 'reconciliation', component: ReconciliationExplorerComponent }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
-    EEListComponent,
-    EIListComponent,
-    ReconciliationComponent
+    EEBalanceExplorerComponent,
+    EIBalanceExplorerComponent,
+    ReconciliationExplorerComponent
   ],
   imports: [
     BrowserModule,

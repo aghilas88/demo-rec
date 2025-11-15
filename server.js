@@ -63,6 +63,20 @@ function generateReconciliation(page = 0, size = 20) {
 }
 
 // API endpoints
+app.get('/balance/configs', (req, res) => {
+  console.log('GET /balance/configs');
+  
+  const configs = [
+    'CONFIG_PROD_01',
+    'CONFIG_PROD_02',
+    'CONFIG_DEV_01',
+    'CONFIG_TEST_01',
+    'CONFIG_UAT_01'
+  ];
+  
+  res.json(configs);
+});
+
 app.get('/balance/ee/:configName', (req, res) => {
   const { configName } = req.params;
   const { balanceDate, page = '0', size = '20' } = req.query;
@@ -96,6 +110,7 @@ app.get('/balance/reconciliation/:configName', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Mock API server running on http://localhost:${PORT}`);
   console.log('Available endpoints:');
+  console.log(`  GET /balance/configs`);
   console.log(`  GET /balance/ee/:configName?balanceDate=YYYY-MM-DD&page=0&size=20`);
   console.log(`  GET /balance/ei/:configName?balanceDate=YYYY-MM-DD&page=0&size=20`);
   console.log(`  GET /balance/reconciliation/:configName?balanceDate=YYYY-MM-DD&page=0&size=20`);

@@ -3,12 +3,13 @@ import { ApiService } from '../../services/api.service';
 import { Reconciliation } from '../../models/balances.model';
 
 @Component({
-  selector: 'app-reconciliation',
-  templateUrl: './reconciliation.component.html',
-  styleUrls: ['./reconciliation.component.css']
+  selector: 'app-reconciliation-explorer',
+  templateUrl: './reconciliation-explorer.component.html',
+  styleUrls: ['./reconciliation-explorer.component.css']
 })
-export class ReconciliationComponent implements OnInit {
+export class ReconciliationExplorerComponent implements OnInit {
   reconciliations: Reconciliation[] = [];
+  configs: string[] = [];
   balanceDate: string = '';
   configName: string = '';
   currentPage: number = 0;
@@ -17,11 +18,24 @@ export class ReconciliationComponent implements OnInit {
 
   constructor(private apiService: ApiService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loadConfigs();
+  }
+
+  loadConfigs() {
+    this.apiService.getConfigs().subscribe(
+      (data) => {
+        this.configs = data;
+      },
+      (error) => {
+        console.error('Error loading configs', error);
+      }
+    );
+  }
 
   fetchReconciliationData(): void {
     if (!this.configName || !this.balanceDate) {
-      alert('Please enter Config Name and Balance Date');
+      alert('Please select Config Name and Balance Date');
       return;
     }
     

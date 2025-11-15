@@ -4,12 +4,13 @@
   <div class="filters">
     <div class="filter-group">
       <label for="configName">Config Name:</label>
-      <input 
-        type="text" 
+      <select 
         id="configName" 
-        [(ngModel)]="configName" 
-        placeholder="Enter config name"
-      />
+        [(ngModel)]="configName"
+      >
+        <option value="" disabled>Select a config</option>
+        <option *ngFor="let config of configs" [value]="config">{{ config }}</option>
+      </select>
     </div>
     <div class="filter-group">
       <label for="balanceDate">Balance Date:</label>

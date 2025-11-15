@@ -12,6 +12,10 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
+  getConfigs(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/configs`);
+  }
+
   getEEBalances(configName: string, balanceDate: string, page: number = 0, size: number = 20): Observable<EEBalance[]> {
     return this.http.get<EEBalance[]>(`${this.apiUrl}/ee/${configName}?balanceDate=${balanceDate}&page=${page}&size=${size}`);
   }

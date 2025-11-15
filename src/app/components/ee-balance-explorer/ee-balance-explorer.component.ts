@@ -3,12 +3,13 @@ import { ApiService } from '../../services/api.service';
 import { EEBalance } from '../../models/balances.model';
 
 @Component({
-  selector: 'app-ee-list',
-  templateUrl: './ee-list.component.html',
-  styleUrls: ['./ee-list.component.css']
+  selector: 'app-ee-balance-explorer',
+  templateUrl: './ee-balance-explorer.component.html',
+  styleUrls: ['./ee-balance-explorer.component.css']
 })
-export class EEListComponent implements OnInit {
+export class EEBalanceExplorerComponent implements OnInit {
   eeBalances: EEBalance[] = [];
+  configs: string[] = [];
   configName: string = '';
   balanceDate: string = '';
   currentPage: number = 0;
@@ -17,11 +18,24 @@ export class EEListComponent implements OnInit {
 
   constructor(private apiService: ApiService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadConfigs();
+  }
+
+  loadConfigs() {
+    this.apiService.getConfigs().subscribe(
+      (data) => {
+        this.configs = data;
+      },
+      (error) => {
+        console.error('Error loading configs', error);
+      }
+    );
+  }
 
   fetchEEBalances() {
     if (!this.configName || !this.balanceDate) {
-      alert('Please enter Config Name and Balance Date');
+      alert('Please select Config Name and Balance Date');
       return;
     }
     
