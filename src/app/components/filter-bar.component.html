@@ -6,14 +6,46 @@
     </button>
   </div>
   <div class="filter-chips">
-    <div class="filter-chip" *ngFor="let filter of filters; let i = index" [class.negated]="filter.negate">
-      <span class="filter-label">{{ getFilterLabel(filter) }}</span>
-      <button class="toggle-negate-btn" (click)="toggleNegate(i)" title="Toggle negation">
-        {{ filter.negate ? '+' : '−' }}
-      </button>
-      <button class="remove-btn" (click)="removeFilter(i)" title="Remove filter">
-        ✕
-      </button>
+    <div class="filter-chip-container" *ngFor="let filter of filters; let i = index">
+      <div class="filter-chip" 
+           [class.negated]="filter.negate" 
+           [class.editing]="editingIndex === i"
+           (click)="startEdit(i)">
+        <span class="filter-label" *ngIf="editingIndex !== i">
+          {{ getFilterLabel(filter) }}
+        </span>
+        
+        <!-- Edit mode -->
+        <div class="filter-edit" *ngIf="editingIndex === i" (click)="$event.stopPropagation()">
+          <span class="field-name">{{ filter.field }}</span>
+          
+          <select class="operator-select" 
+                  [value]="filter.operator || 'equals'" 
+                  (change)="updateOperator(i, $event.target.value)">
+            <option *ngFor="let op of operators" [value]="op.value">
+              {{ op.symbol }} {{ op.label }}
+            </option>
+          </select>
+          
+          <input type="text" 
+                 class="value-input" 
+                 [value]="filter.value" 
+                 (input)="updateValue(i, $event)"
+                 (keyup.enter)="applyValueChange(i)"
+                 (blur)="applyValueChange(i)">
+        </div>
+        
+        <button class="toggle-negate-btn" 
+                (click)="toggleNegate(i); $event.stopPropagation()" 
+                title="Toggle negation">
+          {{ filter.negate ? '+' : '−' }}
+        </button>
+        <button class="remove-btn" 
+                (click)="removeFilter(i); $event.stopPropagation()" 
+                title="Remove filter">
+          ✕
+        </button>
+      </div>
     </div>
   </div>
 </div>
