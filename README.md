@@ -40,6 +40,12 @@ balance-explorer
 - **EE List**: Displays a list of EE balances fetched from the API.
 - **EI List**: Displays a list of EI balances fetched from the API.
 - **Reconciliation**: Shows reconciliation data and status.
+- **Advanced Filtering**: Kibana-style filtering system with support for:
+  - Quick filter addition from any table value
+  - Filter editing with customizable fields, operators, and values
+  - Filter negation (NOT mode)
+  - Multiple operators (equals, contains, greater than, less than, etc.)
+  - See [FILTERS.md](FILTERS.md) for detailed documentation
 
 ## Getting Started
 
