@@ -1,0 +1,19 @@
+<div class="filter-bar" *ngIf="filters.length > 0">
+  <div class="filter-header">
+    <h3>Active Filters</h3>
+    <button class="clear-all-btn" (click)="clearAllFilters()" title="Clear all filters">
+      Clear All
+    </button>
+  </div>
+  <div class="filter-chips">
+    <div class="filter-chip" *ngFor="let filter of filters; let i = index" [class.negated]="filter.negate">
+      <span class="filter-label">{{ getFilterLabel(filter) }}</span>
+      <button class="toggle-negate-btn" (click)="toggleNegate(i)" title="Toggle negation">
+        {{ filter.negate ? '+' : '−' }}
+      </button>
+      <button class="remove-btn" (click)="removeFilter(i)" title="Remove filter">
+        ✕
+      </button>
+    </div>
+  </div>
+</div>

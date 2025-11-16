@@ -23,6 +23,11 @@
     <button class="search-btn" (click)="fetchReconciliationData()">Search</button>
   </div>
 
+  <app-filter-bar 
+    [filters]="filters" 
+    (filtersChange)="onFiltersChanged()">
+  </app-filter-bar>
+
   <table *ngIf="reconciliations.length > 0">
     <thead>
       <tr>
@@ -35,11 +40,26 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of reconciliations">
-        <td>{{ item.product }}</td>
-        <td>{{ item.dossier }}</td>
-        <td>{{ item.eeAmount }}</td>
-        <td>{{ item.eiAmount }}</td>
-        <td [ngClass]="{'break': item.status === 'BREAK', 'match': item.status === 'MATCH'}">{{ item.status }}</td>
+        <td>
+          {{ item.product }}
+          <button class="add-filter-btn" (click)="addFilter('product', item.product)" title="Add filter">+</button>
+        </td>
+        <td>
+          {{ item.dossier }}
+          <button class="add-filter-btn" (click)="addFilter('dossier', item.dossier)" title="Add filter">+</button>
+        </td>
+        <td>
+          {{ item.eeAmount }}
+          <button class="add-filter-btn" (click)="addFilter('eeAmount', item.eeAmount)" title="Add filter">+</button>
+        </td>
+        <td>
+          {{ item.eiAmount }}
+          <button class="add-filter-btn" (click)="addFilter('eiAmount', item.eiAmount)" title="Add filter">+</button>
+        </td>
+        <td [ngClass]="{'break': item.status === 'BREAK', 'match': item.status === 'MATCH'}">
+          {{ item.status }}
+          <button class="add-filter-btn" (click)="addFilter('status', item.status)" title="Add filter">+</button>
+        </td>
       </tr>
     </tbody>
   </table>

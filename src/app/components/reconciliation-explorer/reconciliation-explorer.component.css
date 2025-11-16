@@ -73,6 +73,55 @@ table {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+table td {
+  position: relative;
+}
+
+.add-filter-btn {
+  display: inline-block;
+  margin-left: 8px;
+  background: #007bff;
+  color: white;
+  border: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1;
+  padding: 0;
+  transition: all 0.2s;
+  vertical-align: middle;
+  opacity: 0.7;
+}
+
+.add-filter-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  background: #0056b3;
+}
+
+table tr:hover .add-filter-btn {
+  opacity: 1;
+}
+
+.filter-group select {
+  padding: 10px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s;
+  background: white;
+  cursor: pointer;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
 .break {
   color: #e53e3e;
   font-weight: 600;

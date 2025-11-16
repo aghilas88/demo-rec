@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { EEBalance, EIBalance, Reconciliation } from '../models/balances.model';
+import { EEBalance, EIBalance, Reconciliation, SearchQuery } from '../models/balances.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,5 +26,17 @@ export class ApiService {
 
   getReconciliationData(configName: string, balanceDate: string, page: number = 0, size: number = 20): Observable<Reconciliation[]> {
     return this.http.get<Reconciliation[]>(`${this.apiUrl}/reconciliation/${configName}?balanceDate=${balanceDate}&page=${page}&size=${size}`);
+  }
+
+  searchEEBalances(configName: string, query: SearchQuery): Observable<EEBalance[]> {
+    return this.http.post<EEBalance[]>(`${this.apiUrl}/ee/${configName}/search`, query);
+  }
+
+  searchEIBalances(configName: string, query: SearchQuery): Observable<EIBalance[]> {
+    return this.http.post<EIBalance[]>(`${this.apiUrl}/ei/${configName}/search`, query);
+  }
+
+  searchReconciliation(configName: string, query: SearchQuery): Observable<Reconciliation[]> {
+    return this.http.post<Reconciliation[]>(`${this.apiUrl}/reconciliation/${configName}/search`, query);
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
-import { Reconciliation } from '../../models/balances.model';
+import { Reconciliation, FilterCriteria, SearchQuery } from '../../models/balances.model';
 
 @Component({
   selector: 'app-reconciliation-explorer',
@@ -15,6 +15,7 @@ export class ReconciliationExplorerComponent implements OnInit {
   currentPage: number = 0;
   pageSize: number = 20;
   totalPages: number = 5;
+  filters: FilterCriteria[] = [];
 
   constructor(private apiService: ApiService) {}
 
@@ -39,7 +40,14 @@ export class ReconciliationExplorerComponent implements OnInit {
       return;
     }
     
-    this.apiService.getReconciliationData(this.configName, this.balanceDate, this.currentPage, this.pageSize).subscribe(
+    const query: SearchQuery = {
+      balanceDate: this.balanceDate,
+      filters: this.filters,
+      page: this.currentPage,
+      size: this.pageSize
+    };
+
+    this.apiService.searchReconciliation(this.configName, query).subscribe(
       (data: Reconciliation[]) => {
         this.reconciliations = data;
       },
@@ -47,6 +55,24 @@ export class ReconciliationExplorerComponent implements OnInit {
         console.error('Error fetching reconciliation data', error);
       }
     );
+  }
+
+  addFilter(field: string, value: any) {
+    const newFilter: FilterCriteria = {
+      field,
+      value,
+      operator: 'equals',
+      negate: false
+    };
+    
+    this.filters.push(newFilter);
+    this.currentPage = 0;
+    this.fetchReconciliationData();
+  }
+
+  onFiltersChanged() {
+    this.currentPage = 0;
+    this.fetchReconciliationData();
   }
 
   nextPage() {

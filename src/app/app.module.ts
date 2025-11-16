@@ -9,6 +9,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { EEBalanceExplorerComponent } from './components/ee-balance-explorer/ee-balance-explorer.component';
 import { EIBalanceExplorerComponent } from './components/ei-balance-explorer/ei-balance-explorer.component';
 import { ReconciliationExplorerComponent } from './components/reconciliation-explorer/reconciliation-explorer.component';
+import { FilterBarComponent } from './components/filter-bar.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -23,7 +24,8 @@ const routes: Routes = [
     DashboardComponent,
     EEBalanceExplorerComponent,
     EIBalanceExplorerComponent,
-    ReconciliationExplorerComponent
+    ReconciliationExplorerComponent,
+    FilterBarComponent
   ],
   imports: [
     BrowserModule,

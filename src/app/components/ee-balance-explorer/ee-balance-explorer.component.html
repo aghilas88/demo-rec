@@ -23,6 +23,11 @@
     <button class="search-btn" (click)="fetchEEBalances()">Search</button>
   </div>
 
+  <app-filter-bar 
+    [filters]="filters" 
+    (filtersChange)="onFiltersChanged()">
+  </app-filter-bar>
+
   <table *ngIf="eeBalances.length > 0">
     <thead>
       <tr>
@@ -33,9 +38,18 @@
     </thead>
     <tbody>
       <tr *ngFor="let balance of eeBalances">
-        <td>{{ balance.product }}</td>
-        <td>{{ balance.dossier }}</td>
-        <td>{{ balance.eeAmount | number: '1.2-2' }}</td>
+        <td>
+          {{ balance.product }}
+          <button class="add-filter-btn" (click)="addFilter('product', balance.product)" title="Add filter">+</button>
+        </td>
+        <td>
+          {{ balance.dossier }}
+          <button class="add-filter-btn" (click)="addFilter('dossier', balance.dossier)" title="Add filter">+</button>
+        </td>
+        <td>
+          {{ balance.eeAmount | number: '1.2-2' }}
+          <button class="add-filter-btn" (click)="addFilter('eeAmount', balance.eeAmount)" title="Add filter">+</button>
+        </td>
       </tr>
     </tbody>
   </table>

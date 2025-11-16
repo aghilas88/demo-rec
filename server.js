@@ -5,7 +5,7 @@ const app = express();
 const PORT = 8080;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 // Mock data generator
 function generateEEBalances(page = 0, size = 20) {
@@ -62,6 +62,52 @@ function generateReconciliation(page = 0, size = 20) {
   return reconciliations;
 }
 
+// Filter function
+function applyFilters(data, filters) {
+  if (!filters || filters.length === 0) {
+    return data;
+  }
+  
+  return data.filter(item => {
+    return filters.every(filter => {
+      const { field, value, operator = 'equals', negate = false } = filter;
+      const itemValue = item[field];
+      
+      if (itemValue === undefined) return !negate;
+      
+      let matches = false;
+      
+      switch (operator) {
+        case 'equals':
+          matches = String(itemValue).toLowerCase() === String(value).toLowerCase();
+          break;
+        case 'contains':
+          matches = String(itemValue).toLowerCase().includes(String(value).toLowerCase());
+          break;
+        case 'gt':
+          matches = Number(itemValue) > Number(value);
+          break;
+        case 'gte':
+          matches = Number(itemValue) >= Number(value);
+          break;
+        case 'lt':
+          matches = Number(itemValue) < Number(value);
+          break;
+        case 'lte':
+          matches = Number(itemValue) <= Number(value);
+          break;
+        case 'ne':
+          matches = String(itemValue).toLowerCase() !== String(value).toLowerCase();
+          break;
+        default:
+          matches = String(itemValue).toLowerCase() === String(value).toLowerCase();
+      }
+      
+      return negate ? !matches : matches;
+    });
+  });
+}
+
 // API endpoints
 app.get('/balance/configs', (req, res) => {
   console.log('GET /balance/configs');
@@ -107,6 +153,54 @@ app.get('/balance/reconciliation/:configName', (req, res) => {
   res.json(data);
 });
 
+// Search endpoints with filters
+app.post('/balance/ee/:configName/search', (req, res) => {
+  const { configName } = req.params;
+  const { balanceDate, filters = [], page = 0, size = 20 } = req.body;
+  
+  console.log(`POST /balance/ee/${configName}/search`, { balanceDate, filters, page, size });
+  
+  // Generate all data first
+  const allData = generateEEBalances(0, 100);
+  
+  // Apply filters
+  const filteredData = applyFilters(allData, filters);
+  
+  // Apply pagination
+  const start = page * size;
+  const paginatedData = filteredData.slice(start, start + size);
+  
+  res.json(paginatedData);
+});
+
+app.post('/balance/ei/:configName/search', (req, res) => {
+  const { configName } = req.params;
+  const { balanceDate, filters = [], page = 0, size = 20 } = req.body;
+  
+  console.log(`POST /balance/ei/${configName}/search`, { balanceDate, filters, page, size });
+  
+  const allData = generateEIBalances(0, 100);
+  const filteredData = applyFilters(allData, filters);
+  const start = page * size;
+  const paginatedData = filteredData.slice(start, start + size);
+  
+  res.json(paginatedData);
+});
+
+app.post('/balance/reconciliation/:configName/search', (req, res) => {
+  const { configName } = req.params;
+  const { balanceDate, filters = [], page = 0, size = 20 } = req.body;
+  
+  console.log(`POST /balance/reconciliation/${configName}/search`, { balanceDate, filters, page, size });
+  
+  const allData = generateReconciliation(0, 100);
+  const filteredData = applyFilters(allData, filters);
+  const start = page * size;
+  const paginatedData = filteredData.slice(start, start + size);
+  
+  res.json(paginatedData);
+});
+
 app.listen(PORT, () => {
   console.log(`Mock API server running on http://localhost:${PORT}`);
   console.log('Available endpoints:');
@@ -114,4 +208,7 @@ app.listen(PORT, () => {
   console.log(`  GET /balance/ee/:configName?balanceDate=YYYY-MM-DD&page=0&size=20`);
   console.log(`  GET /balance/ei/:configName?balanceDate=YYYY-MM-DD&page=0&size=20`);
   console.log(`  GET /balance/reconciliation/:configName?balanceDate=YYYY-MM-DD&page=0&size=20`);
+  console.log(`  POST /balance/ee/:configName/search (with JSON body)`);
+  console.log(`  POST /balance/ei/:configName/search (with JSON body)`);
+  console.log(`  POST /balance/reconciliation/:configName/search (with JSON body)`);
 });

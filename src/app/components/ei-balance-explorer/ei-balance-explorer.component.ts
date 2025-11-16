@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
-import { EIBalance } from '../../models/balances.model';
+import { EIBalance, FilterCriteria, SearchQuery } from '../../models/balances.model';
 
 @Component({
   selector: 'app-ei-balance-explorer',
@@ -15,6 +15,7 @@ export class EIBalanceExplorerComponent implements OnInit {
   currentPage: number = 0;
   pageSize: number = 20;
   totalPages: number = 5;
+  filters: FilterCriteria[] = [];
 
   constructor(private apiService: ApiService) {}
 
@@ -39,7 +40,14 @@ export class EIBalanceExplorerComponent implements OnInit {
       return;
     }
     
-    this.apiService.getEIBalances(this.configName, this.balanceDate, this.currentPage, this.pageSize).subscribe(
+    const query: SearchQuery = {
+      balanceDate: this.balanceDate,
+      filters: this.filters,
+      page: this.currentPage,
+      size: this.pageSize
+    };
+
+    this.apiService.searchEIBalances(this.configName, query).subscribe(
       (data: EIBalance[]) => {
         this.eiBalances = data;
       },
@@ -47,6 +55,24 @@ export class EIBalanceExplorerComponent implements OnInit {
         console.error('Error fetching EI balances', error);
       }
     );
+  }
+
+  addFilter(field: string, value: any) {
+    const newFilter: FilterCriteria = {
+      field,
+      value,
+      operator: 'equals',
+      negate: false
+    };
+    
+    this.filters.push(newFilter);
+    this.currentPage = 0;
+    this.fetchEIBalances();
+  }
+
+  onFiltersChanged() {
+    this.currentPage = 0;
+    this.fetchEIBalances();
   }
 
   nextPage() {
