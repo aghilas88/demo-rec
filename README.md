@@ -11,12 +11,14 @@ balance-explorer
 ├── src
 │   ├── app
 │   │   ├── components
-│   │   │   ├── dashboard          # Main dashboard component
-│   │   │   ├── ee-list           # Component for displaying EE balances
-│   │   │   ├── ei-list           # Component for displaying EI balances
-│   │   │   └── reconciliation     # Component for displaying reconciliation data
+│   │   │   ├── dashboard                  # Main dashboard component
+│   │   │   ├── ee-balance-explorer        # Component for displaying EE balances
+│   │   │   ├── ei-balance-explorer        # Component for displaying EI balances
+│   │   │   ├── reconciliation-explorer    # Component for displaying reconciliation data
+│   │   │   ├── filter-bar.component.*     # Filter bar component for Kibana-style filtering
+│   │   │   └── edit-filter-dialog.component.* # Dialog component for editing filters
 │   │   ├── services               # Service for API interactions
-│   │   ├── models                 # Data models for balances and reconciliation
+│   │   ├── models                 # Data models for balances, reconciliation, and filters
 │   │   ├── app.module.ts          # Root module of the application
 │   │   ├── app.component.ts       # Root component of the application
 │   │   ├── app.component.html     # Template for the root component
@@ -27,19 +29,22 @@ balance-explorer
 │   ├── main.ts                    # Entry point of the application
 │   ├── polyfills.ts               # Polyfills for browser compatibility
 │   └── styles.css                 # Global styles
+├── server.js                      # Backend server with mock data
 ├── angular.json                   # Angular CLI configuration
 ├── package.json                   # npm configuration
 ├── tsconfig.json                  # TypeScript configuration
 ├── .gitignore                     # Git ignore file
-└── README.md                      # Project documentation
+├── README.md                      # Project documentation
+├── FILTERS.md                     # Filtering system documentation
+└── SERVER.md                      # Backend server documentation
 ```
 
 ## Features
 
 - **Dashboard**: Overview of balances and reconciliation status.
-- **EE List**: Displays a list of EE balances fetched from the API.
-- **EI List**: Displays a list of EI balances fetched from the API.
-- **Reconciliation**: Shows reconciliation data and status.
+- **EE Balance Explorer**: Displays and filters EE balance data fetched from the API.
+- **EI Balance Explorer**: Displays and filters EI balance data fetched from the API.
+- **Reconciliation Explorer**: Shows reconciliation data and status with filtering capabilities.
 - **Advanced Filtering**: Kibana-style filtering system with support for:
   - Quick filter addition from any table value
   - Filter editing with customizable fields, operators, and values
@@ -64,20 +69,33 @@ balance-explorer
    npm install
    ```
 
-4. Run the application:
+4. Start the backend server (provides mock data):
+   ```
+   node server.js
+   ```
+
+5. In a separate terminal, run the Angular application:
    ```
    ng serve
    ```
 
-5. Open your browser and navigate to `http://localhost:4200`.
+6. Open your browser and navigate to `http://localhost:4200`.
 
 ## API Endpoints
 
-The application interacts with the following API endpoints:
+The application interacts with the following API endpoints (provided by server.js):
 
-- **EE Balances**: `/balance/ee/{configName}?balanceDate={date}`
-- **EI Balances**: `/balance/ei/{configName}?balanceDate={date}`
-- **Reconciliation**: `/reconciliation/{configName}?balanceDate={date}`
+### GET Endpoints (legacy)
+- **EE Balances**: `GET /balance/ee/{configName}?balanceDate={date}`
+- **EI Balances**: `GET /balance/ei/{configName}?balanceDate={date}`
+- **Reconciliation**: `GET /balance/reconciliation/{configName}?balanceDate={date}`
+
+### POST Endpoints (with filtering support)
+- **EE Balances Search**: `POST /balance/ee/{configName}/search`
+- **EI Balances Search**: `POST /balance/ei/{configName}/search`
+- **Reconciliation Search**: `POST /balance/reconciliation/{configName}/search`
+
+See [FILTERS.md](FILTERS.md) for details on the search request format.
 
 ## Contributing
 
